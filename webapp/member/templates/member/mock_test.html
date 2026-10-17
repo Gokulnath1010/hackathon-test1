@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ exam_name }} | Hackathon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'member/mock_test.css' %}">
+</head>
+<body class="{% if result %}quiz-submitted{% endif %}">
+  <header class="topbar">
+    <a class="brand" href="{% url 'exam_list' %}"><span class="brand-mark">H</span> Hackathon<span class="brand-dot">.</span></a>
+    <div class="topbar-meta"><span class="live-dot"></span> Practice mode <span class="divider"></span> <span>2024 edition</span></div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Daily challenge / 04</p>
+        <h1>Start your<br><em>practice session.</em></h1>
+        <p class="intro-copy">Four quick questions. One clear signal of where your preparation stands today.</p>
+      </div>
+      <div class="session-card">
+        <div class="session-icon">⌁</div>
+        <p class="card-label">SESSION BRIEF</p>
+        <div class="stat-row"><strong>{{ questions|length }}</strong><span>questions</span></div>
+        <div class="stat-row"><strong>45:00</strong><span>time limit</span></div>
+        <div class="stat-row"><strong>+1</strong><span>per correct answer</span></div>
+      </div>
+    </section>
+
+    {% if result %}
+      <section class="result-panel" aria-live="polite">
+        <div><p class="eyebrow">Session complete</p><h2>{{ result.percentage }}<small>%</small></h2></div>
+        <div class="result-copy"><strong>{{ result.correct }} of {{ result.total }} answers correct</strong><p>Time taken: <b>{{ result.time_taken }}</b></p><p>Review each question to compare your answer.</p></div>
+      </section>
+    {% endif %}
+
+    <form method="post" id="quiz-form">
+      {% csrf_token %}
+      <input type="hidden" name="time_taken" id="time-taken" value="0:00">
+      <input type="hidden" name="time_remaining" id="time-remaining" value="45:00">
+      <div class="quiz-head"><div><span class="eyebrow">Test area</span><h2>Knowledge check</h2></div><div class="timer" id="timer">{% if result %}{{ result.time_remaining }}{% else %}45:00{% endif %}</div></div>
+      <div class="progress-track"><span id="progress"></span></div>
+      <div class="questions">
+        {% for question in questions %}
+          <fieldset class="question" data-question="{{ forloop.counter }}">
+            <div class="question-number">0{{ forloop.counter }}</div>
+            <div class="question-body">
+              <p class="topic">{{ question.topic }}</p>
+              <legend>{{ question.text }}</legend>
+              {% if question.code %}<pre class="question-code">{{ question.code }}</pre>{% endif %}
+              {% if result %}<button class="question-answer-button" type="button">View answer <span>↓</span></button><div class="answer-reveal"><div class="{% if question.user_answer == question.answer %}answer-correct{% else %}answer-wrong{% endif %}"><span>Your answer</span><strong>{{ question.user_answer }}</strong></div><div class="answer-correct"><span>Correct answer</span><strong>{{ question.answer }}</strong></div></div>{% endif %}
+              <div class="options">
+                {% for option in question.options %}
+                  <label class="option"><input type="radio" name="question-{{ question.id }}" value="{{ option }}"><span class="option-letter">{{ forloop.counter|add:64|stringformat:'c' }}</span><span>{{ option }}</span><span class="check">✓</span></label>
+                {% endfor %}
+              </div>
+            </div>
+          </fieldset>
+        {% endfor %}
+      </div>
+      <div class="form-footer"><p><span id="answered">0</span> / {{ questions|length }} answered</p><button class="button" type="submit">Submit answers <span>↗</span></button></div>
+    </form>
+  </main>
+  <script src="{% static 'member/mock_test.js' %}"></script>
+</body>
+</html>

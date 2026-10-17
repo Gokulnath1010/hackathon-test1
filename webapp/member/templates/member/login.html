@@ -1,0 +1,14 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in | Hackathon</title><link rel="stylesheet" href="{% static 'member/mock_test.css' %}">
+</head>
+<body class="auth-page">
+  <main class="login-wrap">
+    <section class="login-art"><a class="brand" href="{% url 'login' %}"><span class="brand-mark">H</span> Hackathon<span class="brand-dot">.</span></a><div class="reference-image-wrap"><img class="reference-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkEsu4zdSTPvRDyK8lDXkamUjsSU9Mem2OWbYt76vB37gS0urgPPUxDsPU&amp;s=10" alt="Hackathon visual"></div></section>
+    <section class="login-panel"><div class="login-box"><p class="eyebrow">Member access</p><h2>Welcome back.</h2><p class="login-subtitle">Enter your details to choose your next mock test.</p>{% if message %}<p class="error-message">{{ message }}</p>{% endif %}<form method="post" action="{% url 'login' %}">{% csrf_token %}<label>Student name<input name="student_name" type="text" placeholder="Enter student name" required></label><label>Course<input name="course" type="text" placeholder="Enter course" required></label><label>Staff name<input name="staff_name" type="text" placeholder="Enter staff name" required></label><label>Username<input name="username" type="text" placeholder="Enter username" autocomplete="username" required></label><label>Password<input name="password" type="password" placeholder="Enter password" autocomplete="current-password" required></label><button class="button login-button" type="submit">Continue <span>↗</span></button></form><p class="demo-hint">Demo access · pumo / 1234</p></div></section>
+  </main>
+</body>
+</html>

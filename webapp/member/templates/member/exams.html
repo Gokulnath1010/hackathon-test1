@@ -1,0 +1,9 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Choose your exam | Hackathon</title><link rel="stylesheet" href="{% static 'member/mock_test.css' %}"></head>
+<body>
+  <header class="topbar"><a class="brand" href="{% url 'exam_list' %}"><span class="brand-mark">H</span> Hackathon<span class="brand-dot">.</span></a><div class="topbar-meta"><span class="live-dot"></span> <span>Signed in as <strong>{{ student.name }}</strong></span><span class="divider"></span><a class="logout-link" href="{% url 'logout' %}">Log out</a></div></header>
+  <main class="exam-shell"><div class="student-strip"><div><span>STUDENT</span><strong>{{ student.name }}</strong></div><div><span>COURSE</span><strong>{{ student.course }}</strong></div><div><span>STAFF NAME</span><strong>{{ student.staff }}</strong></div></div><div class="exam-heading"><div><p class="eyebrow">Pick your path / 01</p><h1>Choose your <em>exam.</em></h1><p>Everything is free — one login unlocks all of it.</p></div><div class="heading-mark">✦</div></div><section class="exam-grid">{% for exam in exams %}<article class="exam-card tone-{{ exam.tone }}"><div class="exam-card-top"><div class="exam-symbol">{{ exam.name|slice:':1' }}</div><h2>{{ exam.name }}</h2><a href="{% url 'exam_mock_test' exam.slug %}" class="explore">Explore <span>→</span></a></div><p class="exam-count">{{ exam.count }} tests</p><p class="exam-description">{{ exam.description }}</p><a class="series-chip" href="{% url 'exam_mock_test' exam.slug %}">⌘ &nbsp;{{ exam.series }}</a></article>{% endfor %}</section></main>
+</body>
+</html>
