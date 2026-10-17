@@ -30,9 +30,9 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('1', 'true', 'yes')
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
-    if host.strip()
+    "hackathon-test1-gfea.onrender.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
